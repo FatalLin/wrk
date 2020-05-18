@@ -8,7 +8,7 @@
 
 #include "ssl.h"
 
-SSL_CTX *ssl_init() {
+SSL_CTX *ssl_init(char* ssl_c_cert, char* ssl_c_key) {
     SSL_CTX *ctx = NULL;
 
     SSL_load_error_strings();
@@ -20,6 +20,10 @@ SSL_CTX *ssl_init() {
         SSL_CTX_set_verify_depth(ctx, 0);
         SSL_CTX_set_mode(ctx, SSL_MODE_AUTO_RETRY);
         SSL_CTX_set_session_cache_mode(ctx, SSL_SESS_CACHE_CLIENT);
+        if (ssl_c_cert && ssl_c_key) {
+                SSL_CTX_use_certificate_file(ctx, ssl_c_cert, SSL_FILETYPE_PEM);
+                SSL_CTX_use_PrivateKey_file(ctx, ssl_c_key, SSL_FILETYPE_PEM);
+        }
     }
 
     return ctx;
